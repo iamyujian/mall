@@ -1,9 +1,8 @@
 <template>
   <div class="recommend">
-    <div v-for="item in recommends" class="recommend-item">
-      <!-- <a :href="item.link"> -->
-      <a @click="defaultClick">
-        <img :src="item.image" alt />
+    <div class="recommend-item" v-for="item in recommends" @click="recommendClick(item)">
+      <a>
+        <img :src="item.image" />
         <div>{{item.title}}</div>
       </a>
     </div>
@@ -13,17 +12,10 @@
 <script>
 export default {
   name: "RecommendView",
-  props: {
-    recommends: {
-      type: Array,
-      default() {
-        return [];
-      }
-    }
-  },
+  props: { recommends: Array, default: [] },
   methods: {
-    defaultClick() {
-      this.$toast.show();
+    recommendClick(item) {
+      this.$toast.show(item.title);
     }
   }
 };
@@ -32,7 +24,6 @@ export default {
 <style scoped>
 .recommend {
   display: flex;
-  /* width: 100%; */
   text-align: center;
   font-size: 12px;
   padding: 10px 0 15px;
@@ -42,6 +33,7 @@ export default {
   flex: 1;
 }
 .recommend-item img {
+  vertical-align: middle;
   width: 70px;
   height: 70px;
   margin-bottom: 10px;

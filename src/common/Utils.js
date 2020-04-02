@@ -1,16 +1,15 @@
-// 防抖函数
 export function debounce(func, delay) {
-  let timer = null;
-
+  let timer = null
   return function (...args) {
-    if (timer) { clearTimeout(timer); }
-
+    if (timer) {
+      clearTimeout(timer)
+    }
     timer = setTimeout(() => {
-      func.apply(this, args);
-
-    }, delay);
-  };
+      func.apply(this, args)
+    }, delay)
+  }
 }
+
 // 封装时间戳初始化时间函数
 export function formatDate(date, fmt) {
   if (/(y+)/.test(fmt)) {
@@ -35,4 +34,3 @@ export function formatDate(date, fmt) {
 function padLeftZero(str) {
   return ('00' + str).substr(str.length);
 };
-

@@ -1,8 +1,7 @@
 <template>
-  <div class="feature">
-    <!-- <a href="http://act.mogujie.com/zzlx67"> -->
-    <a @click="defaultClick">
-      <img src="~assets/img/home/recommend_bg.jpg" alt />
+  <div class="feature" @click="featureClick">
+    <a>
+      <img src="../../../assets/img/home/recommend_bg.jpg" />
     </a>
   </div>
 </template>
@@ -11,14 +10,14 @@
 export default {
   name: "FeatureView",
   methods: {
-    defaultClick() {
+    featureClick() {
       this.$toast.show();
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 .feature img {
   width: 100%;
 }

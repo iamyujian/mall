@@ -21,8 +21,10 @@ export default {
     show(message = "敬请期待！", duration = 1500) {
       this.isShow = true;
       this.message = message;
-
-      setTimeout(() => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      let timer = setTimeout(() => {
         this.isShow = false;
         this.message = "";
       }, duration);

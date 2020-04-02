@@ -1,28 +1,26 @@
 <template>
   <swiper>
-    <swiper-item v-for="item in banners">
-      <!-- <a :href="item.link"> -->
-      <a @click="defaultClick">
-        <img :src="item.image" alt @load="swipperImageLoad" />
+    <swiper-item v-for="item in banner" :key="item.id">
+      <a @click="swiperClick">
+        <img :src="item.image" @load="swiperImageLoad" />
       </a>
     </swiper-item>
   </swiper>
 </template>
 
 <script>
-import { Swiper, SwiperItem } from "components/common/swiper/index.js";
-
+import { Swiper, SwiperItem } from "@/components/common/swiper/index";
 export default {
   name: "HomeSwiper",
   props: {
-    banners: {
+    banner: {
       type: Array,
       default() {
         return [];
       }
     }
   },
-  data() {
+  data: function() {
     return {
       isLoad: false
     };
@@ -32,15 +30,14 @@ export default {
     SwiperItem
   },
   methods: {
-    swipperImageLoad() {
-      // 为了不多次调用，这里只发送一次
+    swiperClick() {
+      this.$toast.show();
+    },
+    swiperImageLoad() {
       if (!this.isLoad) {
-        this.$emit("swipperImageLoad");
+        this.$emit("swiperImageLoad");
         this.isLoad = true;
       }
-    },
-    defaultClick() {
-      this.$toast.show();
     }
   }
 };

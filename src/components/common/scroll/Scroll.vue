@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" ref="wrapper">
+  <div class="better-scroll" ref="betterScroll">
     <div class="content">
       <slot></slot>
     </div>
@@ -13,7 +13,9 @@ export default {
   props: {
     probeType: {
       type: Number,
-      default: 0
+      default() {
+        return 0;
+      }
     },
     pullUpLoad: {
       type: Boolean,
@@ -24,37 +26,37 @@ export default {
     return { scroll: null };
   },
   mounted() {
-    // 创建 BScroll 对象
-    this.scroll = new BScroll(this.$refs.wrapper, {
+    // 创建BScroll对象
+    this.scroll = new BScroll(this.$refs.betterScroll, {
+      // 允许按钮点击
       click: true,
-      // 通过值判断是否此功能
+      // 根据数值判断是否监听
       probeType: this.probeType,
+      // 上拉事件
       pullUpLoad: this.pullUpLoad
     });
-
     // 监听滚动的位置
     this.scroll.on("scroll", position => {
       this.$emit("scroll", position);
     });
-
-    // 监听上拉事件
+    // 监听上拉加载更多
     this.scroll.on("pullingUp", () => {
-      this.$emit("pullingUp");
+      this.$emit("scrollLoadMore");
     });
   },
   methods: {
+    refresh() {
+      this.scroll && this.scroll.refresh();
+    },
     scrollTo(x, y, time = 300) {
       this.scroll && this.scroll.scrollTo(x, y, time);
     },
     finishPullUp() {
       this.scroll && this.scroll.finishPullUp();
-    },
-    refresh() {
-      this.scroll && this.scroll.refresh();
     }
   }
 };
 </script>
 
-<style scoped>
+<style>
 </style>

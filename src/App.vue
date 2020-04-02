@@ -3,22 +3,21 @@
     <keep-alive exclude="Detail">
       <router-view></router-view>
     </keep-alive>
-
-    <maintabbar></maintabbar>
+    <tab-bar />
   </div>
 </template>
 
 <script>
-import maintabbar from "components/content/mainTabBar/mainTabBar.vue";
+import TabBar from "./components/comtent/tabbar/TabBar";
 
 export default {
   name: "App",
   components: {
-    maintabbar
+    TabBar
   }
 };
 </script>
 
-<style>
+<style scoped>
 @import "assets/css/base.css";
 </style>

@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="shop-bottom">
-      <div class="enter-shop">进店逛逛</div>
+      <div class="enter-shop" @click="goShopClick">进店逛逛</div>
     </div>
   </div>
 </template>
@@ -48,6 +48,11 @@ export default {
     sellCountFilter: function(value) {
       if (value < 10000) return value;
       return (value / 10000).toFixed(1) + "万";
+    }
+  },
+  methods: {
+    goShopClick() {
+      this.$toast.show("本店已倒闭！");
     }
   }
 };

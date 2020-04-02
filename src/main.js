@@ -1,23 +1,22 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store/vuex';
+import store from './store'
 import toast from './components/common/toast/index';
-import FastClick from 'fastclick';
 import VueLazyLoad from 'vue-lazyload';
+import FastClick from 'fastclick';
 
 Vue.config.productionTip = false
-
+// 事件总线
 Vue.prototype.$bus = new Vue()
 // 安装toast插件
 Vue.use(toast)
-// 解决移动端300毫秒的延迟
-FastClick.attach(document.body)
-
-// 使用懒加载插件
+// 使用图片懒加载
 Vue.use(VueLazyLoad, {
-  loading: require('./assets/img/common/zhanwei.jpg')
+  loading: require('@/assets/img/common/zhanwei.jpg')
 })
+// 300秒延迟
+FastClick.attach(document.body)
 
 new Vue({
   router,

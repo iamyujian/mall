@@ -1,63 +1,46 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @detailTitleClick="detailTitleClick" ref="currentActive" />
-    <scroll class="detail-content" ref="scroll" :probe-type="3" @scroll="contentScroll">
-      <DetailSwipper :top-images="topImages" />
-      <DetailBaseInfo :goods="goods" />
+    <detail-nar-bar class="detail-nar-bar" @titleClick="titleClick" ref="narBar" />
+    <scroll class="scroll-content" ref="scrollContent" :probe-type="3" @scroll="contentScroll">
+      <detail-swiper :topImages="topImages" />
+      <detail-base-info :base-info="goods" />
       <detail-shop-info :shop="shop" />
-      <detail-goods-info :detail-info="detailInfo" @detailImageLoad="detailImageLoad" />
-      <detail-param-info ref="detailParam" :param-info="paramsInfo" />
-      <detail-comment-info ref="detailComment" :comment-info="commentInfo" />
+      <detail-goods-info
+        :detail-goods-info="detailInfo"
+        @detailGoodsInfoImgLoad="detailGoodsInfoImgLoad"
+      />
+      <detail-param-info :param-info="paramsInfo" ref="paramInfo" />
+      <detail-comment-info :comment-info="commentInfo" ref="commentInfo" />
       <div class="recommend">相关推荐</div>
-      <goods-list ref="detailRecommends" :goods="recommends" />
+      <goods-list :goods="recommends" ref="recommends" />
     </scroll>
-    <detail-botton-bar @addToCart="addToCart" />
-    <back-top @click.native="backClick" v-show="isShowBackTop" />
-    <!-- <toast :message="toastMessage" :show="isShow"></toast> -->
+    <BackTop @click.native="backClick" v-show="isShowBackTop" />
+    <detail-bottom-bar @addToCart="addToCart" />
   </div>
 </template>
 
 <script>
-import DetailNavBar from "./childComps/DetailNavBar";
-import DetailSwipper from "./childComps/DetailSwipper";
+import Scroll from "@/components/common/scroll/Scroll";
+import GoodsList from "@/components/comtent/goods/GoodsList";
+import BackTop from "@/components/comtent/backTop/BackTop";
+import DetailNarBar from "./childComps/DetailNarBar";
+import DetailSwiper from "./childComps/DetailSwiper";
+import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
-import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
-import DetailParamInfo from "./childComps/DetailParamsInfo";
+import DetailParamInfo from "./childComps/DetailParamInfo";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
-import DetailBottonBar from "./childComps/DetailBottonBar";
-
-import Scroll from "components/common/scroll/Scroll";
-import GoodsList from "components/content/goods/GoodsList";
-import BackTop from "components/content/backTop/BackTop";
-// import Toast from "components/common/toast/Toast";
-
-import { debounce } from "common/Utils";
-
+import DetailBottomBar from "./childComps/DetailBottomBar";
+import { debounce } from "@/common/Utils";
 import {
   getDetail,
   Goods,
   Shop,
   GoodsParam,
   getRecommend
-} from "network/detail";
-
+} from "@/network/detail";
 export default {
   name: "Detail",
-  components: {
-    DetailNavBar,
-    DetailSwipper,
-    DetailBaseInfo,
-    DetailShopInfo,
-    DetailGoodsInfo,
-    DetailParamInfo,
-    DetailCommentInfo,
-    DetailBottonBar,
-    Scroll,
-    GoodsList,
-    BackTop
-    // Toast
-  },
   data() {
     return {
       iid: null,
@@ -68,101 +51,115 @@ export default {
       paramsInfo: {},
       commentInfo: {},
       recommends: [],
-      topNavBarScrollTop: [],
-      scrollPosition: 0,
+      topNarScrollTo: [],
       isShowBackTop: false
-      // toastMessage: "",
-      // isShow: false
     };
   },
+  components: {
+    Scroll,
+    DetailNarBar,
+    DetailSwiper,
+    DetailGoodsInfo,
+    DetailBaseInfo,
+    DetailShopInfo,
+    DetailParamInfo,
+    DetailCommentInfo,
+    GoodsList,
+    BackTop,
+    DetailBottomBar
+  },
   created() {
-    // 保存传入的 id
+    if (this.$route.path.indexOf("/detail") === 0) {
+      this.$store.commit("isShowTab", false);
+    }
+
+    // 拿到动态传入的ID
     this.iid = this.$route.params.iid;
-    // 根据 id 将请求详情数据
-    getDetail(this.iid).then(res => {
-      // console.log(res);
-      const data = res.result;
-      // 获取轮播图数据
-      this.topImages = data.itemInfo.topImages;
-
-      // 获取商品信息
-      this.goods = new Goods(
-        data.itemInfo,
-        data.columns,
-        data.shopInfo.services
-      );
-
-      // 获取店铺信息
-      this.shop = new Shop(data.shopInfo);
-
-      // 获取商品详情信息
-      this.detailInfo = data.detailInfo;
-
-      // 获取参数信息
-      this.paramsInfo = new GoodsParam(
-        data.itemParams.info,
-        data.itemParams.rule
-      );
-
-      // 获取评论信息
-      if (data.rate.cRate !== 0) {
-        this.commentInfo = data.rate.list[0];
-      }
-    });
-
-    getRecommend().then(res => {
-      this.recommends = res.data.list;
-    });
+    this._getDetail();
+    this._getRecommend();
   },
   mounted() {
-    // 监听 item 中图片加载完成
-    const refresh = debounce(this.$refs.scroll.refresh, 100);
+    const refresh = debounce(this.$refs.scrollContent.refresh, 200);
     this.$bus.$on("detailItemImageLoad", () => {
       refresh();
     });
   },
   methods: {
-    detailImageLoad() {
-      this.$refs.scroll.refresh();
-      // 获取移动距离所需要的对应高度
-      this.topNavBarScrollTop.push(0);
-      this.topNavBarScrollTop.push(this.$refs.detailParam.$el.offsetTop);
-      this.topNavBarScrollTop.push(this.$refs.detailComment.$el.offsetTop);
-      this.topNavBarScrollTop.push(
-        this.$refs.detailRecommends.$el.offsetTop - 38
-      );
-    },
+    /**
+     * 网络请求相关
+     */
+    _getDetail() {
+      getDetail(this.iid).then(res => {
+        const data = res.result;
 
-    detailTitleClick(index) {
-      this.$refs.scroll.scrollTo(0, -this.topNavBarScrollTop[index], 100);
+        // 轮播图数据
+        this.topImages = data.itemInfo.topImages;
+        // 商品信息
+        this.goods = new Goods(
+          data.itemInfo,
+          data.columns,
+          data.shopInfo.services
+        );
+        // 店铺信息
+        this.shop = new Shop(data.shopInfo);
+        // 获取商品详情信息
+        this.detailInfo = data.detailInfo;
+        // 获取参数信息
+        this.paramsInfo = new GoodsParam(
+          data.itemParams.info,
+          data.itemParams.rule
+        );
+        // 获取评论信息
+        if (data.rate.cRate !== 0) {
+          this.commentInfo = data.rate.list[0];
+        }
+      });
     },
-
+    _getRecommend() {
+      getRecommend().then(res => {
+        this.recommends = res.data.list;
+      });
+    },
+    /**
+     * 事件相关
+     */
+    detailGoodsInfoImgLoad() {
+      this.$refs.scrollContent.refresh();
+      // 获取移动距离所需要的对应元素宽度
+      this.topNarScrollTo.push(0);
+      this.topNarScrollTo.push(this.$refs.paramInfo.$el.offsetTop);
+      this.topNarScrollTo.push(this.$refs.commentInfo.$el.offsetTop);
+      this.topNarScrollTo.push(this.$refs.recommends.$el.offsetTop - 38);
+    },
+    titleClick(index) {
+      this.$refs.scrollContent.scrollTo(0, -this.topNarScrollTo[index]);
+    },
+    //滚动距离
     contentScroll(position) {
       this.isShowBackTop = -position.y > 1000;
-      this.scrollPosition = -position.y;
-      if (this.scrollPosition < this.topNavBarScrollTop[1]) {
-        this.$refs.currentActive.currentActive = 0;
+
+      if (-position.y < this.topNarScrollTo[1]) {
+        this.$refs.narBar.currentActive = 0;
       } else if (
-        this.scrollPosition >= this.topNavBarScrollTop[1] &&
-        this.scrollPosition < this.topNavBarScrollTop[2]
+        -position.y >= this.topNarScrollTo[1] &&
+        -position.y < this.topNarScrollTo[2]
       ) {
-        this.$refs.currentActive.currentActive = 1;
+        this.$refs.narBar.currentActive = 1;
       } else if (
-        this.scrollPosition >= this.topNavBarScrollTop[2] &&
-        this.scrollPosition < this.topNavBarScrollTop[3]
+        -position.y >= this.topNarScrollTo[2] &&
+        -position.y < this.topNarScrollTo[3]
       ) {
-        this.$refs.currentActive.currentActive = 2;
-      } else if (this.scrollPosition >= this.topNavBarScrollTop[3]) {
-        this.$refs.currentActive.currentActive = 3;
+        this.$refs.narBar.currentActive = 2;
+      } else if (-position.y >= this.topNarScrollTo[3]) {
+        this.$refs.narBar.currentActive = 3;
       }
     },
-
+    // 返回顶部
     backClick() {
-      this.$refs.scroll.scrollTo(0, 0);
+      this.$refs.scrollContent.scrollTo(0, 0);
     },
-
+    // 获取添加进购物车内的商品信息
     addToCart() {
-      // 获取购物车需要展示的信息
       const cartGoods = {};
       cartGoods.image = this.topImages[0];
       cartGoods.title = this.goods.title;
@@ -170,11 +167,14 @@ export default {
       cartGoods.price = this.goods.newPrice;
       cartGoods.iid = this.iid;
       cartGoods.realPrice = this.goods.realPrice;
-
-      // 将商品加入购物车里
-      this.$store.dispatch("addToCart", cartGoods).then(res => {
-        this.$toast.show(res, 1500);
-      });
+      // 将商品添加进购物车里;
+      if (cartGoods.image) {
+        this.$store.dispatch("addToCart", cartGoods).then(res => {
+          this.$toast.show(res);
+        });
+      } else {
+        this.$toast.show("请重新加载数据！");
+      }
     }
   }
 };
@@ -182,22 +182,16 @@ export default {
 
 <style scoped>
 #detail {
-  position: relative;
-  z-index: 10;
-  background-color: #fff;
   height: 100vh;
 }
-.detail-nav {
-  /* position: relative; */
-  z-index: 11;
+.detail-nar-bar {
   position: fixed;
   top: 0;
-  right: 0;
   left: 0;
+  right: 0;
   background-color: #fff;
 }
-.detail-content {
-  /* height: calc(100% - 93px); */
+.scroll-content {
   position: absolute;
   top: 44px;
   bottom: 49px;
@@ -206,8 +200,8 @@ export default {
   overflow: hidden;
 }
 .recommend {
-  margin: 10px 0;
   text-align: center;
+  line-height: 40px;
   font-size: 15px;
 }
 </style>

@@ -1,20 +1,20 @@
 <template>
-  <div v-if="Object.keys(goods).length !== 0" class="base-info">
-    <div class="info-title">{{goods.title}}</div>
+  <div v-if="Object.keys(baseInfo).length !== 0" class="base-info">
+    <div class="info-title">{{baseInfo.title}}</div>
     <div class="info-price">
-      <span class="n-price">{{goods.newPrice}}</span>
-      <span class="o-price">{{goods.oldPrice}}</span>
-      <span v-if class="discount">{{goods.discount}}</span>
+      <span class="n-price">{{baseInfo.newPrice}}</span>
+      <span class="o-price">{{baseInfo.oldPrice}}</span>
+      <span class="discount">{{baseInfo.discount}}</span>
     </div>
     <div class="info-other">
-      <span>{{goods.columns[0]}}</span>
-      <span>{{goods.columns[1]}}</span>
-      <span>{{goods.services[goods.services.length-1].name}}</span>
+      <span>{{baseInfo.columns[0]}}</span>
+      <span>{{baseInfo.columns[1]}}</span>
+      <span>{{baseInfo.services[baseInfo.services.length-1].name}}</span>
     </div>
     <div class="info-service">
-      <span class="info-service-item" v-for="index in goods.services.length-1" :key="index">
-        <img :src="goods.services[index-1].icon" alt />
-        <span>{{goods.services[index-1].name}}</span>
+      <span class="info-service-item" v-for="index in baseInfo.services.length-1" :key="index">
+        <img :src="baseInfo.services[index-1].icon" />
+        <span>{{baseInfo.services[index-1].name}}</span>
       </span>
     </div>
   </div>
@@ -24,7 +24,7 @@
 export default {
   name: "DetailBaseInfo",
   props: {
-    goods: {
+    baseInfo: {
       type: Object,
       default() {
         return {};
@@ -49,19 +49,19 @@ export default {
 }
 .info-price .n-price {
   font-size: 24px;
-  color: var(--color-high-text);
+  color: #ff5777;
 }
-.info-price .o-price {
+.o-price {
   font-size: 13px;
   margin: 0 5px;
   /* 横线 */
   text-decoration: line-through;
 }
-.info-price .discount {
+.discount {
   font-size: 12px;
   padding: 2px 5px;
   color: #fff;
-  background-color: var(--color-high-text);
+  background-color: #ff5777;
   border-radius: 8px;
   position: relative;
   top: -5px;
@@ -79,7 +79,6 @@ export default {
   justify-content: space-between;
   line-height: 60px;
 }
-
 .info-service-item img {
   width: 14px;
   height: 14px;
