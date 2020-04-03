@@ -10,7 +10,7 @@
 
 另：项目的接口地址已经隐藏，需要的朋友可以加 coderwhy 大佬微信获取。
 
- <img src="https://i.loli.net/2020/04/02/rFCaLiGWzVDNYsQ.jpg" alt="1" style="zoom: 67%;" /><img src="https://i.loli.net/2020/04/02/Mlq8hxJd4p27nVa.jpg" alt="2" style="zoom:67%;" />
+
 
 ## Project setup
 ```
