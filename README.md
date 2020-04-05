@@ -4,7 +4,7 @@
 
 扫描二维码在手机浏览器里浏览项目：
 
-![2020-04-05_16-21-39](https://i.loli.net/2020/04/05/JMwscZBhEiN7Fk8.png)
+![2020-04-05_17-41-46](../2020-04-05_17-41-46.png)
 
 简陋的项目文档：[http://41ntyl.coding-pages.com/2020/04/02/mall%E9%A1%B9%E7%9B%AE%E9%9A%8F%E7%AC%94/](http://41ntyl.coding-pages.com/2020/04/02/mall项目随笔/)
 

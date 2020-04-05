@@ -1,5 +1,6 @@
 <template>
   <div id="login">
+    <Scroll class="scroll-content">
     <div class="login-box">
       <div class="title">登 录</div>
       <form action>
@@ -31,19 +32,23 @@
             @blur="loseFocus"
             value
           />
-       
         </div>
 
         <button class="btn" @click.prevent="btnClick">登 录</button>
       </form>
       <div class="sign" @click="registered">没有账号，去注册一个！</div>
     </div>
+    </Scroll>
   </div>
 </template>
 
 <script>
+import Scroll from '@/components/common/scroll/Scroll';
 export default {
   name: "Login",
+  components: {
+    Scroll
+  },
   data() {
     return {
       userInfo: this.$store.state.userInfo
@@ -97,6 +102,7 @@ export default {
   background-size: 100% 100%;
   padding: 40px 25px;
   color: #fff;
+  position: relative;
 }
 
 .title {
@@ -141,7 +147,13 @@ export default {
   width: 100%;
   background-color: transparent;
   color: #fff;
+outline: none;
+-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+tap-highlight-color:rgba(0, 0, 0, 0);
 }
+/* .btn:focus {
+  outline: none
+} */
 
 .sign {
   margin-top: 30px;
@@ -157,5 +169,13 @@ export default {
   left: 25px;
   bottom: -18px;
   padding: 3px;
+}
+.scroll-content {
+  position: absolute;
+  top: 40px;
+  bottom: 49px;
+  left: 25px;
+  right: 25px;
+  overflow: hidden;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div id="login">
+    <scroll class="scroll-content">
     <div class="login-box">
       <div class="title">注 册</div>
       <form action>
@@ -65,12 +66,17 @@
       </form>
       <div class="sign" @click="login">已有账号，去登录！</div>
     </div>
+    </scroll>
   </div>
 </template>
 
 <script>
+import Scroll from '@/components/common/scroll/Scroll';
 export default {
   name: "Registered",
+  components: {
+    Scroll
+  },
   methods: {
     getFocus(even) {
       let num = 0;
@@ -118,6 +124,9 @@ export default {
       this.$router.push("/login");
     },
     btnClick() {
+      document.body.addEventListener('touchstart',() => {
+
+      })
       let userObj = {};
       let user = document.querySelector(".user").value;
       let pwd = document.querySelector(".pwd").value;
@@ -206,11 +215,25 @@ export default {
   width: 100%;
   background-color: transparent;
   color: #fff;
+  outline: none;
+-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+tap-highlight-color:rgba(0, 0, 0, 0);
 }
-
+/* .btn:active {
+-webkit-appearance: none;
+-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+} */
 .sign {
   margin-top: 30px;
   float: right;
   font-size: 14px;
+}
+.scroll-content {
+  position: absolute;
+  top: 40px;
+  bottom: 49px;
+  left: 25px;
+  right: 25px;
+  overflow: hidden;
 }
 </style>
