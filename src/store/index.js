@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 const state = {
   isShowTab: true,
-  cartList: []
+  cartList: [],
+  userInfo: {}
 
 }
 export default new Vuex.Store({

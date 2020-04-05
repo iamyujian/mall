@@ -1,0 +1,37 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3248686",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e522",
+      "unicode_decimal": 58658
+    },
+    {
+      "icon_id": "3764006",
+      "name": "电话",
+      "font_class": "weibiaoti-",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "6196898",
+      "name": "邮箱",
+      "font_class": "youxiang",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "13603722",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    }
+  ]
+}

@@ -40,6 +40,7 @@ export default {
     UserInfo,
     ListView
   },
+ 
   methods: {
     balanceClick() {
       this.$toast.show("点击了余额");
@@ -51,9 +52,13 @@ export default {
       this.$toast.show("点击了积分");
     },
     userClick() {
-      console.log(11);
+      this.$router.push("/login");
     }
   }
+  // watch :{
+  //   isLogin
+  //   this.$store.state.userInfo
+  // }
 };
 </script>
 

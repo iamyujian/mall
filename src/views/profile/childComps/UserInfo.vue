@@ -8,13 +8,15 @@
 
     <div class="login-info left">
       <slot name="user-nickname">
-        <div>登录/注册</div>
+        <div v-if="isLogin">用户名：{{username}}</div>
+        <div v-else>登录/注册</div>
       </slot>
       <div class="phone">
         <span>
           <img src="@/assets/img/profile/phone.svg" />
         </span>
-        <slot name="user-phone">暂无绑定手机号</slot>
+        <span v-if="isLogin">{{tel}}</span>
+        <span v-else>暂无绑定手机号</span>
       </div>
     </div>
     <span class="arrow">
@@ -25,7 +27,25 @@
 
 <script>
 export default {
-  name: "UserInfo"
+  name: "UserInfo",
+  data() {
+    return {
+      tel: '',
+      username: ''
+    }
+  },
+   computed: {
+    isLogin() {
+      if (this.$store.state.userInfo.isLogin) {
+        return true;
+        console.log(this.$store.state.userInfo);
+      }
+    }
+  },
+  updated() {
+    this.tel = this.$store.state.userInfo.tel
+    this.username = this.$store.state.userInfo.username
+  }
 };
 </script>
 

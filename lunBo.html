@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .swiper {
+      position: relative;
+      overflow: hidden;
+      width: 500px;
+      height: 300px;
+      margin: 100px 200px;
+    }
+
+    ul li {
+      width: 100%;
+      height: 100%;
+      list-style: none;
+      position: absolute;
+      top: 0;
+      opacity: 0;
+      transition: all 500ms;
+    }
+
+    ul li:first-child {
+      background-color: pink;
+    }
+
+    ul li:nth-child(2) {
+      background-color: orange;
+    }
+
+    ul li:nth-child(3) {
+      background-color: green;
+    }
+
+    ul li:nth-child(4) {
+      background-color: grey;
+    }
+
+    ul li:nth-child(5) {
+      background-color: goldenrod;
+    }
+
+    button {
+      height: 50px;
+      width: 20px;
+      z-index: 9;
+      position: absolute;
+    }
+
+    .goLeft {
+      left: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+    .goRight {
+      right: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+    .active {
+      z-index: 8;
+      opacity: 1;
+    }
+
+    .cicle {
+      position: absolute;
+      width: 120px;
+      height: 20px;
+      /* background-color: #fff; */
+      z-index: 9;
+      bottom: 5%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+
+    .cicle li {
+      list-style: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #fff;
+      float: left;
+      margin-right: 10px;
+    }
+
+    .olactive {
+      background-color: hotpink !important;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="swiper">
+    <ul class="ulObj">
+      <li class="active">1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+      <li>5</li>
+    </ul>
+    <div class="cicle">
+      <ol class="olObj">
+        <li class="olactive" data-index="0"></li>
+        <li data-index="1"></li>
+        <li data-index="2"></li>
+        <li data-index="3"></li>
+        <li data-index="4"></li>
+      </ol>
+    </div>
+
+    <button class="goLeft">
+      <</button> <button class="goRight">>
+    </button>
+  </div>
+  <script>
+    let ulObj = document.querySelector('.ulObj')
+    let liObj = ulObj.children
+    let olObj = document.querySelector('.olObj')
+    let liObj2 = olObj.children
+    let goLeft = document.getElementsByTagName('button')[0]
+    let goRight = document.getElementsByTagName('button')[1]
+    let index = 0
+    let time = 0
+
+    function clearClass() {
+      for (let i = 0; i < liObj.length; i++) {
+        liObj[i].className = ''
+      }
+      for (let i = 0; i < liObj2.length; i++) {
+        liObj2[i].className = ''
+      }
+      liObj[index].className = 'active'
+      liObj2[index].className = 'olactive'
+    }
+
+    function goPre() {
+      if (index < 1) {
+        index = 5
+      }
+      index--
+      clearClass()
+    }
+
+    function goNext() {
+      if (index > 3) {
+        index = -1
+      }
+      index++
+      clearClass()
+    }
+
+    goLeft.addEventListener('click', () => {
+      goPre()
+    })
+    goRight.addEventListener('click', () => {
+      goNext()
+    })
+
+    olObj.addEventListener('mousemove', (e) => {
+      let ele = e.target
+      index = ele.getAttribute("data-index")
+      clearClass()
+      time = 0
+    })
+    
+    setInterval(() => {
+      time++
+      if (time === 2) {
+        goNext()
+        time = 0
+      }
+    }, 1000)
+
+  </script>
+</body>
+
+</html>

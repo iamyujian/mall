@@ -10,4 +10,5 @@ export default {
     payload.count = 1
     state.cartList.push(payload)
   }
+   
 }

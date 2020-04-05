@@ -11,7 +11,12 @@
       <div class="item-desc">商品描述：{{itemInfo.desc}}</div>
       <div class="info-bottom">
         <div class="item-price left">￥{{itemInfo.realPrice}}</div>
-        <div class="item-count right">x{{itemInfo.count}}</div>
+        <!-- <div class="item-count right">x{{itemInfo.count}}</div> -->
+        <div class="item-count right">
+          <div class="btn btn1" @click="less">-</div>
+          <div class="number">{{itemInfo.count}}</div>
+          <div class="btn btn2" @click="more">+</div>
+          </div>
       </div>
     </div>
   </div>
@@ -33,9 +38,23 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      showCount : this.itemInfo.count
+    }
+  },
+ 
   methods: {
     checkClick() {
       this.itemInfo.isCheck = !this.itemInfo.isCheck;
+    },
+    less() {
+      if (this.itemInfo.count > 1) {
+        this.itemInfo.count--
+      }
+    },
+    more() {
+      this.itemInfo.count++
     }
   }
 };
@@ -48,6 +67,7 @@ export default {
   font-size: 0;
   padding: 5px;
   border-bottom: 1px solid #ccc;
+  position: relative;
 }
 .item-selector {
   width: 14%;
@@ -60,6 +80,7 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 15px;
 }
 .item-img {
   padding: 5px;
@@ -86,5 +107,32 @@ export default {
 }
 .info-bottom .item-price {
   color: orangered;
+}
+.item-count{
+margin-top: 25px;
+display: flex;
+
+  
+}
+.btn {
+padding:0 10px;
+border: 1px solid #ccc;
+}
+.btn1 {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.btn2 {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.number {
+  padding-top: 1px;
+  font-size: 14px;
+width: 45px;
+text-align: center;
+border-top: 1px solid #ccc;
+border-bottom: 1px solid #ccc;
+box-sizing: border-box;
 }
 </style>

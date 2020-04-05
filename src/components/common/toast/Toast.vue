@@ -44,5 +44,6 @@ export default {
   color: #fff;
   transform: translate(-50%, -50%);
   z-index: 999;
+  text-align: center;
 }
 </style>

@@ -2,13 +2,15 @@
   <div class="bottom-bar">
     <div class="bar-check">
       <check-button class="bar-check-button" @click.native="checkClick" :is-check="allSelect" />
+      
       <span>全选</span>
-      <div class="totalPrice">
+      <div v-if="isManagement" class="totalPrice">
         合计：
         <span>￥{{totalPrice}}</span>
       </div>
     </div>
-    <div class="calculate" @click="buyClick">去付款({{toBuy}})</div>
+    <div v-if="isManagement" class="calculate" @click="buyClick">去付款({{toBuy}})</div>
+    <div v-else class="calculate delete" @click="deleteClick">删除({{toBuy}})</div>
   </div>
 </template>
 
@@ -16,6 +18,14 @@
 import CheckButton from "@/components/comtent/checkButton/CheckButton";
 export default {
   name: "CartBottomBar",
+  props: {
+    isManagement: {
+      type : Boolean,
+      default() {
+        return true
+      }
+    }
+  },
   data() {
     return {
       cartList: this.$store.state.cartList
@@ -53,6 +63,13 @@ export default {
     },
     buyClick() {
       this.$toast.show();
+    },
+    deleteClick() {
+     for (let i = this.cartList.length - 1; i >= 0 ; i--) {
+       if (this.cartList[i].isCheck) {
+         this.cartList.splice(i,1)
+       }
+     }
     }
   }
 };
@@ -93,4 +110,5 @@ export default {
   padding: 0 4px;
   text-align: center;
 }
+
 </style>
